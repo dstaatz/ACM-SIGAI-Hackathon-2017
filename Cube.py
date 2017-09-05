@@ -215,19 +215,19 @@ class Cube2x2:
 				self.data["R"][2] = temp[5]
 			
 	# Prints the cube to the console
-	def printCube(self):
-		print("  |" + self.data['U'][0] + self.data['U'][1])
-		print("  |" + self.data['U'][3] + self.data['U'][2])
-		print(self.data['L'][0] + self.data['L'][1]+"|"+
+	def __str__(self):
+		return("  |" + self.data['U'][0] + self.data['U'][1] + '\n' +
+		"  |" + self.data['U'][3] + self.data['U'][2] + '\n' +
+		self.data['L'][0] + self.data['L'][1]+"|"+
 		self.data['F'][0] + self.data['F'][1] + "|" +
 		self.data['R'][0] + self.data['R'][1] + "|" +
-		self.data['B'][0] + self.data['B'][1])
-		print(self.data['L'][3] + self.data['L'][2]+"|"+
+		self.data['B'][0] + self.data['B'][1]  + '\n' +
+		self.data['L'][3] + self.data['L'][2]+"|"+
 		self.data['F'][3] + self.data['F'][2] + "|" +
 		self.data['R'][3] + self.data['R'][2] + "|" +
-		self.data['B'][3] + self.data['B'][2])
-		print("  |" + self.data['D'][0] + self.data['D'][1])
-		print("  |" + self.data['D'][3] + self.data['D'][2])
+		self.data['B'][3] + self.data['B'][2]  + '\n' +
+		"  |" + self.data['D'][0] + self.data['D'][1] + '\n' +
+		"  |" + self.data['D'][3] + self.data['D'][2] + '\n')
 	
 	# returns a sorted list (in the form of a string) of the positions with each element as (side, position)
 	def colorPositions(self, color):
@@ -321,9 +321,9 @@ class Cube2x2:
 		
 def main():
 	cube = Cube2x2()
-	cube.move("D")
-	cube.move("U'")
-	cube.printCube()
+	cube.move("R")
+	cube.move("U")
+	print(cube)
 	cube.cubeState()
 		
 
