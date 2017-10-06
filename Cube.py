@@ -24,11 +24,19 @@ BLACK = (0, 0, 0)
 			# GREEN: 'G',
 			# }
 			
-class Cube2x2:
+class Cube2x2():
+	''' 
+		Represent a 2x2 Rubiks Cube
+	'''
 	
 	# initalize the cube with the provided scramble
-	def __init__(self, colorOptions={"F": "W","R": "R","U": "B","B": "Y","L": "O","D": "G"},
-				scramble=[]):
+	def __init__(self, colorOptions={"F": "W","R": "R","U": "B","B": "Y","L": "O","D": "G"}, scramble=[]):
+		'''	Intialize a new cube
+			
+			- colorOptions: allows you to set a starting color for each face
+			- scramble: allows you to specify a starting scramble for the cube
+		'''
+
 		self.colorOptions = colorOptions
 		self.scramble = scramble
 		self.faces = "F","R","U","B","L","D"
@@ -60,8 +68,6 @@ class Cube2x2:
 			"W": ["B","R","G","O","B"],
 			"Y": ["B","O","G","R","B"],
 		}
-		# for x,y in self.relative.items():
-			# print(x,y)
 		self.data = dict([[i, [self.colorOptions[i] for n in range(4)]] for i in self.faces])
 		
 		# Scramble the cube
@@ -69,150 +75,155 @@ class Cube2x2:
 			self.move(i)
 	
 	#rotates a side of a cube in the dircetion 	
-	def move(self, move):
-		self.currentMoveSet.append(move)
-		face = move[0]
-		if(len(move) == 2):
-			if(move[1] == "2"):
-				rotations = 2
-			elif(move[1] == "'"):
-				rotations = 3
-		else:
-			rotations = 1
+	def move(self, moves):
+		'''	Rotates a side of the cube in the direction
 			
-		
-		for i in range(rotations):
-			# rotate face
-			temp = [n for n in self.data[face]]
-			self.data[face][0] = temp[3]
-			self.data[face][1] = temp[0]
-			self.data[face][2] = temp[1]
-			self.data[face][3] = temp[2]
+			- moves: a list of moves to make
+		'''
+		for move in moves:
+			self.currentMoveSet.append(move)
+			face = move[0]
+			if(len(move) == 2):
+				if(move[1] == "2"):
+					rotations = 2
+				elif(move[1] == "'"):
+					rotations = 3
+			else:
+				rotations = 1
+				
 			
-			# rotate edges
-			# relativeLocations = self.relativeFaceLocations[face]
-			temp = []
-			
-			if (face == "F"):
-				# record current state in a list
-				temp.append(self.data["U"][3])
-				temp.append(self.data["U"][2])
-				temp.append(self.data["R"][0])
-				temp.append(self.data["R"][3])
-				temp.append(self.data["D"][1])
-				temp.append(self.data["D"][0])
-				temp.append(self.data["L"][2])
-				temp.append(self.data["L"][1])
+			for i in range(rotations):
+				# rotate face
+				temp = [n for n in self.data[face]]
+				self.data[face][0] = temp[3]
+				self.data[face][1] = temp[0]
+				self.data[face][2] = temp[1]
+				self.data[face][3] = temp[2]
 				
-				# use that to set the new positions
-				self.data["U"][3] = temp[6]
-				self.data["U"][2] = temp[7]
-				self.data["R"][0] = temp[0]
-				self.data["R"][3] = temp[1]
-				self.data["D"][1] = temp[2]
-				self.data["D"][0] = temp[3]
-				self.data["L"][2] = temp[4]
-				self.data["L"][1] = temp[5]
-			elif (face == "R"):
-				# record current state in a list
-				temp.append(self.data["U"][2])
-				temp.append(self.data["U"][1])
-				temp.append(self.data["B"][0])
-				temp.append(self.data["B"][3])
-				temp.append(self.data["D"][2])
-				temp.append(self.data["D"][1])
-				temp.append(self.data["F"][2])
-				temp.append(self.data["F"][1])
+				# rotate edges
+				# relativeLocations = self.relativeFaceLocations[face]
+				temp = []
 				
-				# use that to set the new positions
-				self.data["U"][2] = temp[6]
-				self.data["U"][1] = temp[7]
-				self.data["B"][0] = temp[0]
-				self.data["B"][3] = temp[1]
-				self.data["D"][2] = temp[2]
-				self.data["D"][1] = temp[3]
-				self.data["F"][2] = temp[4]
-				self.data["F"][1] = temp[5]
-			elif (face == "U"):
-				# record current state in a list
-				temp.append(self.data["B"][1])
-				temp.append(self.data["B"][0])
-				temp.append(self.data["R"][1])
-				temp.append(self.data["R"][0])
-				temp.append(self.data["F"][1])
-				temp.append(self.data["F"][0])
-				temp.append(self.data["L"][1])
-				temp.append(self.data["L"][0])
-				
-				# use that to set the new positions
-				self.data["B"][1] = temp[6]
-				self.data["B"][0] = temp[7]
-				self.data["R"][1] = temp[0]
-				self.data["R"][0] = temp[1]
-				self.data["F"][1] = temp[2]
-				self.data["F"][0] = temp[3]
-				self.data["L"][1] = temp[4]
-				self.data["L"][0] = temp[5]
-			elif (face == "B"):
-				# record current state in a list
-				temp.append(self.data["U"][1])
-				temp.append(self.data["U"][0])
-				temp.append(self.data["L"][0])
-				temp.append(self.data["L"][3])
-				temp.append(self.data["D"][3])
-				temp.append(self.data["D"][2])
-				temp.append(self.data["R"][2])
-				temp.append(self.data["R"][1])
-				
-				# use that to set the new positions
-				self.data["U"][1] = temp[6]
-				self.data["U"][0] = temp[7]
-				self.data["L"][0] = temp[0]
-				self.data["L"][3] = temp[1]
-				self.data["D"][3] = temp[2]
-				self.data["D"][2] = temp[3]
-				self.data["R"][2] = temp[4]
-				self.data["R"][1] = temp[5]
-			elif (face == "L"):
-				# record current state in a list
-				temp.append(self.data["U"][0])
-				temp.append(self.data["U"][3])
-				temp.append(self.data["F"][0])
-				temp.append(self.data["F"][3])
-				temp.append(self.data["D"][0])
-				temp.append(self.data["D"][3])
-				temp.append(self.data["B"][2])
-				temp.append(self.data["B"][1])
-				
-				# use that to set the new positions
-				self.data["U"][0] = temp[6]
-				self.data["U"][3] = temp[7]
-				self.data["F"][0] = temp[0]
-				self.data["F"][3] = temp[1]
-				self.data["D"][0] = temp[2]
-				self.data["D"][3] = temp[3]
-				self.data["B"][2] = temp[4]
-				self.data["B"][1] = temp[5]
-			elif (face == "D"):
-				# record current state in a list
-				temp.append(self.data["B"][3])
-				temp.append(self.data["B"][2])
-				temp.append(self.data["L"][3])
-				temp.append(self.data["L"][2])
-				temp.append(self.data["F"][3])
-				temp.append(self.data["F"][2])
-				temp.append(self.data["R"][3])
-				temp.append(self.data["R"][2])
-				
-				# use that to set the new positions
-				self.data["B"][3] = temp[6]
-				self.data["B"][2] = temp[7]
-				self.data["L"][3] = temp[0]
-				self.data["L"][2] = temp[1]
-				self.data["F"][3] = temp[2]
-				self.data["F"][2] = temp[3]
-				self.data["R"][3] = temp[4]
-				self.data["R"][2] = temp[5]
+				if (face == "F"):
+					# record current state in a list
+					temp.append(self.data["U"][3])
+					temp.append(self.data["U"][2])
+					temp.append(self.data["R"][0])
+					temp.append(self.data["R"][3])
+					temp.append(self.data["D"][1])
+					temp.append(self.data["D"][0])
+					temp.append(self.data["L"][2])
+					temp.append(self.data["L"][1])
+					
+					# use that to set the new positions
+					self.data["U"][3] = temp[6]
+					self.data["U"][2] = temp[7]
+					self.data["R"][0] = temp[0]
+					self.data["R"][3] = temp[1]
+					self.data["D"][1] = temp[2]
+					self.data["D"][0] = temp[3]
+					self.data["L"][2] = temp[4]
+					self.data["L"][1] = temp[5]
+				elif (face == "R"):
+					# record current state in a list
+					temp.append(self.data["U"][2])
+					temp.append(self.data["U"][1])
+					temp.append(self.data["B"][0])
+					temp.append(self.data["B"][3])
+					temp.append(self.data["D"][2])
+					temp.append(self.data["D"][1])
+					temp.append(self.data["F"][2])
+					temp.append(self.data["F"][1])
+					
+					# use that to set the new positions
+					self.data["U"][2] = temp[6]
+					self.data["U"][1] = temp[7]
+					self.data["B"][0] = temp[0]
+					self.data["B"][3] = temp[1]
+					self.data["D"][2] = temp[2]
+					self.data["D"][1] = temp[3]
+					self.data["F"][2] = temp[4]
+					self.data["F"][1] = temp[5]
+				elif (face == "U"):
+					# record current state in a list
+					temp.append(self.data["B"][1])
+					temp.append(self.data["B"][0])
+					temp.append(self.data["R"][1])
+					temp.append(self.data["R"][0])
+					temp.append(self.data["F"][1])
+					temp.append(self.data["F"][0])
+					temp.append(self.data["L"][1])
+					temp.append(self.data["L"][0])
+					
+					# use that to set the new positions
+					self.data["B"][1] = temp[6]
+					self.data["B"][0] = temp[7]
+					self.data["R"][1] = temp[0]
+					self.data["R"][0] = temp[1]
+					self.data["F"][1] = temp[2]
+					self.data["F"][0] = temp[3]
+					self.data["L"][1] = temp[4]
+					self.data["L"][0] = temp[5]
+				elif (face == "B"):
+					# record current state in a list
+					temp.append(self.data["U"][1])
+					temp.append(self.data["U"][0])
+					temp.append(self.data["L"][0])
+					temp.append(self.data["L"][3])
+					temp.append(self.data["D"][3])
+					temp.append(self.data["D"][2])
+					temp.append(self.data["R"][2])
+					temp.append(self.data["R"][1])
+					
+					# use that to set the new positions
+					self.data["U"][1] = temp[6]
+					self.data["U"][0] = temp[7]
+					self.data["L"][0] = temp[0]
+					self.data["L"][3] = temp[1]
+					self.data["D"][3] = temp[2]
+					self.data["D"][2] = temp[3]
+					self.data["R"][2] = temp[4]
+					self.data["R"][1] = temp[5]
+				elif (face == "L"):
+					# record current state in a list
+					temp.append(self.data["U"][0])
+					temp.append(self.data["U"][3])
+					temp.append(self.data["F"][0])
+					temp.append(self.data["F"][3])
+					temp.append(self.data["D"][0])
+					temp.append(self.data["D"][3])
+					temp.append(self.data["B"][2])
+					temp.append(self.data["B"][1])
+					
+					# use that to set the new positions
+					self.data["U"][0] = temp[6]
+					self.data["U"][3] = temp[7]
+					self.data["F"][0] = temp[0]
+					self.data["F"][3] = temp[1]
+					self.data["D"][0] = temp[2]
+					self.data["D"][3] = temp[3]
+					self.data["B"][2] = temp[4]
+					self.data["B"][1] = temp[5]
+				elif (face == "D"):
+					# record current state in a list
+					temp.append(self.data["B"][3])
+					temp.append(self.data["B"][2])
+					temp.append(self.data["L"][3])
+					temp.append(self.data["L"][2])
+					temp.append(self.data["F"][3])
+					temp.append(self.data["F"][2])
+					temp.append(self.data["R"][3])
+					temp.append(self.data["R"][2])
+					
+					# use that to set the new positions
+					self.data["B"][3] = temp[6]
+					self.data["B"][2] = temp[7]
+					self.data["L"][3] = temp[0]
+					self.data["L"][2] = temp[1]
+					self.data["F"][3] = temp[2]
+					self.data["F"][2] = temp[3]
+					self.data["R"][3] = temp[4]
+					self.data["R"][2] = temp[5]
 			
 	# Prints the cube to the console
 	def __str__(self):
@@ -229,6 +240,15 @@ class Cube2x2:
 		"  |" + self.data['D'][0] + self.data['D'][1] + '\n' +
 		"  |" + self.data['D'][3] + self.data['D'][2] + '\n')
 	
+	def __eq__(self, other):
+		for side in self.data.keys():
+			if self.data[side] != other.data[side]:
+				break
+		else:
+			return True
+
+		return False
+
 	# returns a sorted list (in the form of a string) of the positions with each element as (side, position)
 	def colorPositions(self, color):
 		lst = []
@@ -321,10 +341,12 @@ class Cube2x2:
 		
 def main():
 	cube = Cube2x2()
-	cube.move("R")
-	cube.move("U")
-	print(cube)
-	cube.cubeState()
+	cube2 = Cube2x2()
+	print(cube2 == cube)
+	cube.move("R", "R'")
+	print(cube2 == cube)
+	cube.move("R'")
+	print(cube2 == cube)
 		
 
 if __name__ == '__main__':
